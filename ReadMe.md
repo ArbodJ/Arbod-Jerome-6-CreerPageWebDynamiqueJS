@@ -21,4 +21,7 @@ Pour acceder au site taper **npm start** sur le dossier Backend du projet.
   - Travail sur le DOM et API.
 
 ### Etape 3 :
-  Ajouter des filtres pour afficher les travaux par catégorie.
+  Ajouter des filtres pour afficher les travaux par catégorie :
+  - Ajout d'une div pour les filtres.
+  - Création de bouton et du texte pour chaque catégories.
+  - Ajout du style CSS, positionnement, et évènement click sur chaque boutons.
