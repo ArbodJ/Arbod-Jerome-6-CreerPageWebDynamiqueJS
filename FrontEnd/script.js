@@ -92,3 +92,9 @@ btnSortHotelsRestaurants.addEventListener('click', function () {
   document.querySelector(".gallery").innerHTML = "";
   displayImg(listHtlRstrt);
 })
+
+// const logIn = document.getElementsByName('login');
+// logIn.addEventListener('click', function() {
+//   logIn.setAttribute('href', './asset/log.html');
+//   console.log(logIn);
+// });

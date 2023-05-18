@@ -25,3 +25,5 @@ Pour acceder au site taper **npm start** sur le dossier Backend du projet.
   - Ajout d'une div pour les filtres.
   - Création de bouton et du texte pour chaque catégories.
   - Ajout du style CSS, positionnement, et évènement click sur chaque boutons.
+
+### Etape 4 :
