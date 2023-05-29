@@ -53,6 +53,29 @@ body {
 	font-family: 'Work Sans' ;
 	font-size: 14px;
 }
+#edit-mod{
+	background: #000;
+	display: flex;
+	justify-content: center;
+}
+#edition{
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	width: 367px;
+	height: 38px;
+}
+.fa-pen-to-square, #text-edit{
+	color: #fff;
+	font-size: 16px;
+	font-weight: 400;
+}
+#text-publish{
+	background: #fff;
+	border-radius: 25px;
+	padding: 11px 23px;
+	font-size: 14px;
+}
 header {
 	display: flex;
 	justify-content: space-between;
@@ -75,7 +98,7 @@ h1 > span {
 	font-family: 'Work Sans';
 	font-size:10px;
 	letter-spacing: 0.1em;
-;
+	;
 }
 
 h2{
@@ -88,14 +111,14 @@ nav ul {
 	display: flex;
 	align-items: center;
 	list-style-type: none;
-
+	
 }
 nav li {
 	padding: 0 10px;
 	font-size: 1.2em;
 }
 
-li:hover {
+li:hover, #link-log:hover{
 	color: #B1663C;
 }
 #link-log{
@@ -129,6 +152,29 @@ li:hover {
 	text-align: center;
 	margin-bottom: 1em;
 }
+#modify{
+	display: flex;
+	justify-content: center;
+	height: 35px;
+	margin-bottom: 92px;
+}
+#pen{
+	color: #000;
+	font-size: 16px;
+	font-weight: 100;
+}
+#modify-text{
+	border: none;
+	background: #fff;
+	font-size: 14px;
+	cursor: pointer;
+}
+#link-modify{
+	display: flex;
+	align-items: center;
+	width: 84px;
+	padding-left: 31px;
+}
 .gallery {
 	width: 100%;
 	display: grid;
@@ -141,6 +187,141 @@ li:hover {
 	width: 100%;
 
 }
+/* modal */
+.modal {
+	/* display: none; */
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	position: fixed;
+	z-index: 1;
+	left: 0;
+	top: 0;
+	width: 100%;
+	height: 100%;
+	background-color: rgba(0, 0, 0, 0.4);
+}
+.modalContent {
+	display: flex;
+	flex-direction: column;
+	background: #fff;
+	border-radius: 10px;
+	width: 630px;
+	height: 731px;
+}
+.modalDivClose{
+	display: flex;
+	justify-content: flex-end;
+	width: 100%;
+	margin-top: 23px;
+}
+.fa-xmark {
+	display: flex!important;
+	justify-content: flex-end;
+	margin-right: 6px;
+	width: 1px;
+	height: 24px;
+	cursor: pointer;
+	font-size: 24px;
+}
+.titleModal {
+	display: flex;
+	justify-content: center;
+	margin-top: 10px;
+	font-size: 26px;
+}
+.galleryModal {
+	width: 420px;
+	height: 386px;
+	margin: 46px auto ;
+	display: grid;
+	grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
+	grid-column-gap: 6px;
+	grid-row-gap: 12px;
+}
+.fgrModal {
+	width: 78px;
+	height: 118px;
+}
+.moveDelete{
+	display: flex;
+	justify-content: space-between;
+	flex-direction: row-reverse;
+	position: relative;
+	top: 25px;
+	left: 33px;
+	width: 37px;
+	height: 17px;
+	/* border: 1px red solid; */
+}
+.divTrash{
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	cursor: pointer;
+	width: 48.5%;
+	border-radius: 2px;
+	background: #000;
+}
+.divMove{
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	cursor: pointer;
+	width: 48.5%;
+	border-radius: 2px;
+	background: #000;
+}
+.fa-trash-can {
+	display: flex;
+	align-items: center;
+	font-size: 11px;
+	color: #fff;
+}
+.fa-arrows-up-down-left-right {
+	display: flex;
+	align-items: center;
+	font-size: 11px;
+	color: #fff;
+}
+.fgcptModal {
+	height: 14px;
+}
+.linkModal {
+	text-decoration: none;
+	font-size: 12px;
+}
+.imgModal{
+	width: 100%;
+	object-fit: cover;
+}
+.lineModal {
+	margin: 0 auto 38px;
+	width: 420px;
+	border: 1px #B3B3B3 solid;
+}
+.btnModal {
+	cursor: pointer;
+	margin: 0 auto 23px;
+	padding: 9px 49px;
+	border-radius: 21px;
+	border: 1px #1D6154 solid;
+	background: #1D6154;
+	color: #fff;
+	font-family: 'Syne';
+	font-weight: 700;
+	font-size: 14px;
+}
+.btnModal1 {
+	width: 25%;
+	margin: 0 auto;
+	cursor: pointer;
+	border: none;
+	background: #fff;
+	font-family: 'Syne';
+	color: #D65353;
+}
+/* filter button */
 #filter {
 	margin: 0 auto 35px auto;
 	display: flex;
