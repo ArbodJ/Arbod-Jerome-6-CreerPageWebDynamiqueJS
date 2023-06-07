@@ -5,8 +5,7 @@ loggin.addEventListener('click', function (event) {
   event.preventDefault();
   const email = document.querySelector("#mail").value;
   const password = document.querySelector("#pwd").value;
-  const emailErr = document.querySelector(".email-error");
-
+  
   // url API in method post
   fetch("http://localhost:5678/api/users/login", {
     method: "POST",
@@ -25,10 +24,7 @@ loggin.addEventListener('click', function (event) {
     window.location.href="index.html";
   })
   .catch(error => {
-    console.error(error);
+    console.log(Error);
+    alert(error);
   });   
-  // if(email !== email.value) {
-    
-  //   emailErr.innerHTML = error(error);
-  // }
 });

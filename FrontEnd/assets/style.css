@@ -118,10 +118,10 @@ nav li {
 	font-size: 1.2em;
 }
 
-li:hover, #link-log:hover{
+li:hover, #link-log:hover, #link-index:hover{
 	color: #B1663C;
 }
-#link-log{
+#link-log, #link-index{
 	text-decoration: none;
 	color: #000;
 }
@@ -159,21 +159,23 @@ li:hover, #link-log:hover{
 	margin-bottom: 92px;
 }
 #pen{
+	cursor: pointer;
 	color: #000;
 	font-size: 16px;
 	font-weight: 100;
 }
 #modify-text{
+	cursor: pointer;
 	border: none;
 	background: #fff;
 	font-size: 14px;
-	cursor: pointer;
 }
 #link-modify{
+	cursor: pointer;
 	display: flex;
 	align-items: center;
 	width: 84px;
-	padding-left: 31px;
+	margin-left: 31px;
 }
 .gallery {
 	width: 100%;
@@ -188,9 +190,9 @@ li:hover, #link-log:hover{
 
 }
 /* modal */
-.modal {
-	/* display: none; */
-	display: flex;
+.modal, .modal-add {
+	display: none;
+	/* display: flex; */
 	justify-content: center;
 	align-items: center;
 	position: fixed;
@@ -201,35 +203,54 @@ li:hover, #link-log:hover{
 	height: 100%;
 	background-color: rgba(0, 0, 0, 0.4);
 }
-.modalContent {
+.modalContent, .modalAddContent {
 	display: flex;
 	flex-direction: column;
+	align-items: center;
 	background: #fff;
 	border-radius: 10px;
 	width: 630px;
 	height: 731px;
 }
-.modalDivClose{
+.divIconClose {
 	display: flex;
 	justify-content: flex-end;
 	width: 100%;
 	margin-top: 23px;
 }
+.divIconCloseAdd {
+	display: flex;
+	justify-content: space-around;
+	width: 100%;
+	margin-top: 23px;
+}
 .fa-xmark {
-	display: flex!important;
+	display: flex;
 	justify-content: flex-end;
 	margin-right: 6px;
-	width: 1px;
+	width: 24px;
 	height: 24px;
 	cursor: pointer;
 	font-size: 24px;
+	color: #000;
+}
+.fa-arrow-left {
+	display: flex;
+	justify-content: flex-start;
+	margin-left: 6px;
+	width: 24px;
+	height: 24px;
+	cursor: pointer;
+	font-size: 24px;
+	color: #000;
 }
 .titleModal {
 	display: flex;
 	justify-content: center;
-	margin-top: 10px;
+	margin-top: 16px;
 	font-size: 26px;
 }
+/*MODAL1*/
 .galleryModal {
 	width: 420px;
 	height: 386px;
@@ -239,7 +260,9 @@ li:hover, #link-log:hover{
 	grid-column-gap: 6px;
 	grid-row-gap: 12px;
 }
-.fgrModal {
+.figureMdl {
+	display: flex;
+	flex-direction: column;
 	width: 78px;
 	height: 118px;
 }
@@ -248,27 +271,17 @@ li:hover, #link-log:hover{
 	justify-content: space-between;
 	flex-direction: row-reverse;
 	position: relative;
-	top: 25px;
-	left: 33px;
-	width: 37px;
-	height: 17px;
-	/* border: 1px red solid; */
+	bottom: 99px;
+	left: 31px;
+	width: 43px;
 }
-.divTrash{
+.divTrashMove{
 	display: flex;
 	justify-content: center;
 	align-items: center;
 	cursor: pointer;
-	width: 48.5%;
-	border-radius: 2px;
-	background: #000;
-}
-.divMove{
-	display: flex;
-	justify-content: center;
-	align-items: center;
-	cursor: pointer;
-	width: 48.5%;
+	width: 45%;
+	height: 18px;
 	border-radius: 2px;
 	background: #000;
 }
@@ -285,14 +298,20 @@ li:hover, #link-log:hover{
 	color: #fff;
 }
 .fgcptModal {
-	height: 14px;
+	position: relative;
+	top: -16px;
+	height: 16px;
+}
+.textFgcpt {
+	cursor: pointer;
 }
 .linkModal {
 	text-decoration: none;
 	font-size: 12px;
 }
-.imgModal{
+.imgMdl{
 	width: 100%;
+	height: 102px;
 	object-fit: cover;
 }
 .lineModal {
@@ -300,7 +319,7 @@ li:hover, #link-log:hover{
 	width: 420px;
 	border: 1px #B3B3B3 solid;
 }
-.btnModal {
+.btnAddOnePicture {
 	cursor: pointer;
 	margin: 0 auto 23px;
 	padding: 9px 49px;
@@ -312,14 +331,103 @@ li:hover, #link-log:hover{
 	font-weight: 700;
 	font-size: 14px;
 }
-.btnModal1 {
-	width: 25%;
+.btnDeleteAll {
+	width: 27%;
 	margin: 0 auto;
 	cursor: pointer;
 	border: none;
 	background: #fff;
 	font-family: 'Syne';
+	font-size: 14px;
 	color: #D65353;
+}
+/*MODAL 2*/
+/*form*/
+.form-modal-add {
+	display: flex;
+	width: 420px;
+	margin-top: 36px;
+}
+.div-add-picture {
+	display: flex;
+	align-items: center;
+	flex-direction: column;
+	width: 100%;
+	height: 169px;
+	background: #E8F1F7;
+}
+.icon-add {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	width: 58px;
+	height: 46px;
+	margin-top: 28px;
+	border: 1px #B9C5CC solid;
+}
+.fa-image {
+	width: 47px;
+	height: 34px;
+	color: #B9C5CC;
+}
+.div-btn-txt {
+	display: flex;
+	flex-direction: column-reverse;
+	align-items: center;
+	margin-top: 21px;
+	width: 100%;
+}
+.label-add-img {
+	font-size: 10px;
+	color: #444444
+}
+.btn-add {
+	width: 173px;
+	height: 36px;
+	padding: 10px 33px;
+	background: #CBD6DC;
+	border: none;
+	border-radius: 25px;
+}
+.txt-add {
+	font-size: 14px;
+	color: #306685;
+}
+.div-send-work {
+	display: flex;
+	flex-direction: column;
+	width: 420px;
+}
+.label-add-title {
+	display: flex;
+	margin-top: 30px;
+}
+.label-add-cat {
+	display: flex;
+	margin-top: 21px;
+}
+.input-title-cat {
+	display: flex;
+	margin-top: 10px;
+	width: 100%;
+	height: 51px;
+	border: none;
+	box-shadow: 0px 4px 14px rgba(0, 0, 0, 0.09);
+}
+.lineModal-add {
+	margin-top: 47px;
+	width: 420px;
+	border: 1px #B3B3B3 solid;
+}
+.btn-add {
+	
+	display: flex !important;
+	justify-content: center!important;
+	cursor: pointer!important;
+	background: #A7A7A7!important;
+	width: 237px!important;
+	height: 36px!important;
+
 }
 /* filter button */
 #filter {

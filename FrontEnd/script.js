@@ -8,17 +8,17 @@ console.log(response);
 // Display picture + title
 function displayImg(response) {
   for (let i = 0; i < response.length; i++) {
-    const item = response[i];
+    const element = response[i];
     // selected placement
     const galleryDiv = document.querySelector('.gallery');
     // created bloc figure
     const figure = document.createElement('figure');
     // Create and insert image
     const img = document.createElement('img');
-    img.setAttribute("src", item.imageUrl);
+    img.setAttribute("src", element.imageUrl);
     // Create and insert tiltle
     const title = document.createElement('figcaption');
-    title.textContent = item.title;
+    title.textContent = element.title;
 
     // Elements places
     galleryDiv.appendChild(figure);
@@ -90,7 +90,7 @@ function filterEvents() {
     console.log(listFlats);
     document.querySelector(".gallery").innerHTML = "";
     displayImg(listFlats);
-  })
+  });
   // Hotel and restaurant display
   btnSortHotelsRestaurants.addEventListener('click', function () {
     const listHtlRstrt = response.filter(function (htlRstrt) {
@@ -99,141 +99,321 @@ function filterEvents() {
     console.log(listHtlRstrt);
     document.querySelector(".gallery").innerHTML = "";
     displayImg(listHtlRstrt);
-  })
+  });
 }
 // ----- LOG IN & LOG OUT -----
 // Display of index.html log in or log out page
 //selection of elements
-const edit = document.getElementById('edit-mod');
-const modify = document.getElementById('link-modify');
-const filter = document.getElementById('filter');
-const log = document.getElementById('link-log');
-
-//app of elements
-function logApp() {
+function logInOut() {
+  const edit = document.getElementById('edit-mod');
+  const modify = document.getElementById('link-modify');
+  const filter = document.getElementById('filter');
+  const log = document.getElementById('link-log');
+  
   if(localStorage.getItem("token")) {
     //login logout
     log.textContent="logout";
-    log.addEventListener('click', function (e) {
-      e.preventDefault();
+    log.addEventListener('click', function () {
       localStorage.removeItem("token");
-      window.location.href="index.html";
+      log.setAttribute("href", "index.html");
     });
     //display logout
     edit.style.display = "flex";
     modify.style.display = "flex";
     filter.style.display = "none";
     
-  }else {
+  } else {
     //display login
     edit.style.display = "none";
     modify.style.display = "none";
     filter.style.display = "flex";
+  } 
+}
+logInOut();
+
+// ----- MODAL 1 & 2 -----
+// - MODAL 1 (gallery & options add one, delete one and delete all) -
+//button div modify (icon & text selected)
+const btnOpenModal = document.querySelector('#link-modify');
+//Div modal DOM selected
+const modal = document.querySelector('#myModal');
+modal.classList.add('modal');
+//Create Dom elements of modal
+const modalContent = document.createElement('div');
+modalContent.classList.add('modalContent');
+modal.appendChild(modalContent);
+
+const divIconClose = document.createElement('div');
+divIconClose.classList.add('divIconClose');
+modalContent.appendChild(divIconClose);
+
+const iconClose = document.createElement('i');
+iconClose.classList.add('fa-solid', 'fa-xmark');
+divIconClose.appendChild(iconClose);
+
+const titleModal = document.createElement('p');
+titleModal.classList.add('titleModal');
+titleModal.textContent = 'Galerie photo';
+modalContent.appendChild(titleModal);
+
+const galleryInModal = document.createElement('div');
+galleryInModal.classList.add('galleryModal');
+modalContent.appendChild(galleryInModal);
+
+const lineModal = document.createElement('div');
+lineModal.classList.add('lineModal');
+modalContent.appendChild(lineModal);
+
+const btnAddOnePicture = document.createElement('button');
+btnAddOnePicture.classList.add('btnAddOnePicture');
+btnAddOnePicture.textContent = "Ajouter une photo";
+
+modalContent.appendChild(btnAddOnePicture);
+
+const btnDeleteAll = document.createElement('button');
+btnDeleteAll.classList.add('btnDeleteAll');
+btnDeleteAll.textContent = "Supprimer la gallerie";
+modalContent.appendChild(btnDeleteAll);
+
+//Display pictures gallery in MODAL 1
+function picturesInModal(response) {
+  for (let i = 0; i < response.length; i++) {
+    const element = response[i];
+    document.querySelector('galleryInModal');
+
+    const figureInModal = document.createElement('figure');
+    figureInModal.classList.add('figureMdl');
+    figureInModal.setAttribute('data', element.id);
+    galleryInModal.appendChild(figureInModal);
+
+    const imgInModal = document.createElement('img');
+    imgInModal.setAttribute('src', element.imageUrl);
+    imgInModal.classList.add('imgMdl');
+    figureInModal.appendChild(imgInModal);
+    
+    const divMoveDelete = document.createElement('div');
+    divMoveDelete.classList.add('moveDelete');
+    figureInModal.appendChild(divMoveDelete);
+
+    const divTrash = document.createElement('div');
+    divTrash.classList.add('divTrashMove');
+    divTrash.innerHTML = '<i class="fa-solid fa-trash-can"></i>';
+    divTrash.addEventListener('click', function(e) {
+      e.preventDefault();
+      const selectPicture = document.querySelector('.figureMdl');
+      console.log(selectPicture);
+      const id = selectPicture.dataset.id;
+      deleteOnePicture(id);
+    });
+    divMoveDelete.appendChild(divTrash);
+
+    const divMove = document.createElement('div');
+    divMove.setAttribute('id', 'move');
+    divMove.classList.add('divTrashMove');
+    divMove.innerHTML = '<i class="fa-solid fa-arrows-up-down-left-right"><i>';
+    divMoveDelete.appendChild(divMove);
+
+    const figcaptionInModal = document.createElement('figcaption');
+    figcaptionInModal.classList.add('fgcptModal');
+    figureInModal.appendChild(figcaptionInModal);
+
+    const textFigcaption = document.createElement('p');
+    textFigcaption.textContent = "éditer";
+    textFigcaption.classList.add('textFgcpt');
+    figcaptionInModal.appendChild(textFigcaption);
   }
 }
-logApp();
+picturesInModal(response);
 
-// ----- MODAL WINDOW -----
-//Place of modal
-const myMdl = document.getElementById('myModal');
-myMdl.classList.add('.modal');
-//Create dynamically elements of modal
-const divMdlContent = document.createElement('div');
-const divMdlClose = document.createElement('div');
-const iconMdlClose = document.createElement('i');
-const titleMdl = document.createElement('p');
-const galleryMdl = document.createElement('div');
-const lineMdl = document.createElement('div');
-const btnAddMdl = document.createElement('button');
-const btnDeleteGallery = document.createElement('button');
-
-//Display modal
-function dsplModal() {
-  //Place of elements
-  myMdl.appendChild(divMdlContent);
-  divMdlContent.appendChild(divMdlClose);
-  divMdlClose.appendChild(iconMdlClose);
-  divMdlContent.appendChild(titleMdl);
-  divMdlContent.appendChild(galleryMdl);
-  divMdlContent.appendChild(lineMdl);
-  divMdlContent.appendChild(btnAddMdl);
-  divMdlContent.appendChild(btnDeleteGallery);
-  //Call function
-  modalCSS(); 
-}
-dsplModal();
-
-//CSS elements of modal
-function modalCSS() {
-  divMdlContent.classList.add('modalContent');
-  divMdlClose.classList.add('modalDivClose');
-  iconMdlClose.classList.add('fa-xmark');
-  iconMdlClose.innerHTML = '<i class="fa-solid fa-xmark"></i>';
-  titleMdl.classList.add('titleModal');
-  titleMdl.textContent = "Galerie photo";
-  galleryMdl.classList.add('galleryModal');
-  lineMdl.classList.add('lineModal');
-  btnAddMdl.classList.add('btnModal');
-  btnAddMdl.textContent = "Ajouter une photo";
-  btnDeleteGallery.classList.add('btnModal1');
-  btnDeleteGallery.textContent = "Supprimer la galerie";
-  openClose();
-}
-
-//Open and close window modal
-function openClose() {
-  const btnModify = document.getElementById('modify-text');
-  const modal = document.getElementById('myModal');
-  const divGMdl = document.getElementById('myModal');
-  const spanClose = document.getElementsByClassName('fa-xmark')[0];
-  //Open modal
-  btnModify.addEventListener('click', function() {
+//Open & close modal window
+function openModal() {
+  btnOpenModal.addEventListener('click', function() {
     modal.style.display = "flex";
   });
-  //Close modal by icon
-  spanClose.addEventListener('click', function() {
-    modal.style.display = "none";
-  });
-  //Close by window out
-  divGMdl.addEventListener('click', function (event) {
+}
+openModal();
+
+function closeWindowModal() {
+  window.addEventListener('click', function(event) {
     if (event.target == modal) {
       modal.style.display = "none";
     }
   });
-  imgModal(response);
+}
+closeWindowModal();
+
+function iconCloseModal() {
+  iconClose.addEventListener('click', function() {
+    modal.style.display = "none";
+  });
+}
+iconCloseModal();
+
+//Delete one picture
+ function deleteOnePicture(id) {
+  
+  const token = localStorage.getItem('token');
+  console.log(token);
+  fetch(`http://localhost:5678/api/works/${id}`, {
+    method: 'DELETE',
+    headers: {
+      'accept': '*/*',
+      "Content-Type": "application/json",
+      'Authorization': `Bearer ${token}`,
+    },
+  })
+  .then(response => {
+    if(response.ok) {
+      const selectPicture = document.querySelector('.figureMdl');
+      selectPicture.parentNode.removeChild(selectPicture);
+    }
+  })
+  .catch(error => {
+    console.log(Error);
+    alert(error);
+  });
 }
 
-// display pictures in modal
-function imgModal(response) {
-  for (let i = 0; i < response.length; i++) {
-    const element = response[i];
-    document.querySelector('.galleryModal')[i];
-    const mdlFigure = document.createElement('figure');
-    const mdlImg = document.createElement('img');
-    mdlImg.setAttribute("src", element.imageUrl);
-    const mdlMoveDelete = document.createElement('div');
-    const mdlDivTrash = document.createElement('div');
-    const mdlDivMove = document.createElement('div');
-    const mdlFigcaption = document.createElement('figcaption');
-    mdlFigcaption.textContent = "éditer";
-    //CSS general
-    mdlFigure.classList.add('fgrModal');
-    mdlMoveDelete.classList.add('moveDelete');
-    //CSS trash
-    mdlDivTrash.classList.add('divTrash');
-    mdlDivTrash.innerHTML = '<i class="fa-solid fa-trash-can"></i>';
-    //CSS move
-    mdlDivMove.classList.add('divMove');
-    mdlDivMove.innerHTML = '<i class="fa-solid fa-arrows-up-down-left-right"><i>';
-    //CSS img & figcaption
-    mdlImg.classList.add('imgModal');
-    mdlFigcaption.classList.add('fgcptModal');
-    //Place of elements
-    galleryMdl.appendChild(mdlFigure);
-    mdlFigure.appendChild(mdlMoveDelete);
-    mdlMoveDelete.appendChild(mdlDivTrash);
-    mdlMoveDelete.appendChild(mdlDivMove);
-    mdlFigure.appendChild(mdlImg);
-    mdlFigure.appendChild(mdlFigcaption);
-  }
+// - MODAL 2 (add picture)
+// Btn add selected
+const modalAdd = document.querySelector('.modal-add');
+modalAdd.classList.add('modal-add');
+//Create Dom elements of modal
+const modalAddContent = document.createElement('div');
+modalAddContent.classList.add('modalAddContent');
+modalAdd.appendChild(modalAddContent);
+
+const divIconCloseAdd = document.createElement('div');
+divIconCloseAdd.classList.add('divIconCloseAdd');
+modalAddContent.appendChild(divIconCloseAdd);
+
+const iconCloseAddReturn = document.createElement('i');
+iconCloseAddReturn.classList.add('fa-solid', 'fa-arrow-left');
+divIconCloseAdd.appendChild(iconCloseAddReturn);
+
+const iconCloseAdd = document.createElement('i');
+iconCloseAdd.classList.add('fa-solid', 'fa-xmark');
+divIconCloseAdd.appendChild(iconCloseAdd);
+
+const titleModalAdd = document.createElement('p');
+titleModalAdd.classList.add('titleModal');
+titleModalAdd.textContent = 'Ajouter photo';
+modalAddContent.appendChild(titleModalAdd);
+//Form
+const formModalAdd = document.createElement('form');
+formModalAdd.classList.add('form-modal-add');
+formModalAdd.setAttribute('method', 'post');
+formModalAdd.setAttribute('enctype', 'multipart/form-data');
+modalAddContent.appendChild(formModalAdd);
+//Div icon btnadd txt
+//div icon
+const divFormAddPicture = document.createElement('div');
+divFormAddPicture.classList.add('div-add-picture');
+formModalAdd.appendChild(divFormAddPicture);
+
+const divIconAdd = document.createElement('div');
+divIconAdd.classList.add('icon-add');
+divFormAddPicture.appendChild(divIconAdd);
+
+const iconImgAdd = document.createElement('i');
+iconImgAdd.classList.add('fa-light','fa-image');
+divIconAdd.appendChild(iconImgAdd);
+//div btn & txt
+const divBtnTxt = document.createElement('div');
+divBtnTxt.classList.add('div-btn-txt');
+divFormAddPicture.appendChild(divBtnTxt);
+
+const labelAddImg = document.createElement('label');
+labelAddImg.setAttribute('for', 'upload-img');
+labelAddImg.classList.add('label-add-img');
+labelAddImg.textContent = '.jpg, .png : 4mo max';
+divBtnTxt.appendChild(labelAddImg);
+
+const inputAddImg = document.createElement('input');
+inputAddImg.setAttribute('type', 'file');
+inputAddImg.setAttribute('id', 'upload-img');
+inputAddImg.setAttribute('name', 'upload-img');
+inputAddImg.setAttribute('accept', '.jpg, .png');
+inputAddImg.setAttribute('multiple', '');
+inputAddImg.style.opacity = 0;
+divBtnTxt.appendChild(inputAddImg);
+
+const btnAdd = document.createElement('button');
+btnAdd.classList.add('btn-add');
+divBtnTxt.appendChild(btnAdd);
+
+const txtAdd = document.createElement('p');
+txtAdd.classList.add('txt-add');
+txtAdd.textContent = "+ Ajouter photo";
+btnAdd.appendChild(txtAdd);
+// div send work
+const divSendWork = document.createElement('div');
+divSendWork.classList.add('div-send-work');
+modalAddContent.appendChild(divSendWork);
+// input title
+const labelAddTitle = document.createElement('label');
+labelAddTitle.classList.add('label-add-title');
+labelAddTitle.setAttribute('for', 'upload-title');
+labelAddTitle.textContent = 'Titre';
+divSendWork.appendChild(labelAddTitle);
+
+const inputTitle = document.createElement('input');
+inputTitle.setAttribute('type', 'text');
+inputTitle.setAttribute('id', 'upload-title');
+inputTitle.setAttribute('name', 'upload-title');
+inputTitle.classList.add('input-title-cat');
+divSendWork.appendChild(inputTitle);
+
+// input Category
+const labelAddCat = document.createElement('label');
+labelAddCat.classList.add('label-add-cat');
+labelAddCat.setAttribute('for', 'upload-cat');
+labelAddCat.textContent = 'Catégorie';
+divSendWork.appendChild(labelAddCat);
+
+const inputCat = document.createElement('input');
+inputCat.setAttribute('type', 'list');
+inputCat.setAttribute('datalist', 'category');
+inputCat.setAttribute('id', 'upload-cat');
+inputCat.setAttribute('name', 'upload-cat');
+inputCat.classList.add('input-title-cat');
+divSendWork.appendChild(inputCat);
+
+const lineModalAdd = document.createElement('div');
+lineModalAdd.classList.add('lineModal-add');
+divSendWork.appendChild(lineModalAdd);
+
+const inputValid = document.createElement('input');
+inputValid.setAttribute('type', 'submit');
+inputValid.setAttribute('value', 'Valider');
+// inputValid.textContent = "Valider";
+inputValid.classList.add('btn-add');
+divSendWork.appendChild(inputValid);
+
+
+
+
+
+// - open & close MODAL 2 -
+function openModalAddPicture(){
+  btnAddOnePicture.addEventListener('click', function(){
+    modalAdd.style.display = "flex";
+    modal.style.display = "none";
+  });
 }
+openModalAddPicture();
+
+function iconCloseModalAdd() {
+  iconCloseAdd.addEventListener('click', function() {
+    modalAdd.style.display = "none";
+  });
+}
+iconCloseModalAdd();
+// - MODAL 2 return to MODAL 1
+function iconReturnMdl2ToMdl1() {
+  iconCloseAddReturn.addEventListener('click', function() {
+    modalAdd.style.display = 'none';
+    modal.style.display = 'flex';
+  });
+};
+iconReturnMdl2ToMdl1();
