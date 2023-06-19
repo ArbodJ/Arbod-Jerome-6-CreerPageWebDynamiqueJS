@@ -1,9 +1,17 @@
 // call API
-const urlApi = await fetch("http://localhost:5678/api/works");
-const response = await urlApi.json();
-console.log(urlApi);
-console.log(response);
+async function getApi(){
 
+  const urlApi = await fetch("http://localhost:5678/api/works", { method: 'GET'});
+  const response = await urlApi.json();
+  console.log(urlApi);
+  console.log(response);
+  displayImg(response);
+  picturesInModal(response);
+  filterEvents(response);
+  return response;
+}
+getApi();
+// **************************************************************************
 // ----- DYNAMIC DISPLAY -----
 // Display picture + title
 function displayImg(response) {
@@ -13,6 +21,7 @@ function displayImg(response) {
     const galleryDiv = document.querySelector('.gallery');
     // created bloc figure
     const figure = document.createElement('figure');
+    figure.setAttribute('id', 'figInit');
     // Create and insert image
     const img = document.createElement('img');
     img.setAttribute("src", element.imageUrl);
@@ -26,11 +35,15 @@ function displayImg(response) {
     figure.appendChild(title);
   }
 }
-displayImg(response);
-
+// ******************************************************************************
 // ----- FILTERS -----
 // Create div filter and buttons
-const filterDiv = document.querySelector('#filter');
+const filterDiv = document.getElementById('filter');
+if (typeof window !== 'undefined') {
+  console.log('You are on the browser');
+  console.log(document.filter);
+  console.log(document.getElementById('filter'));
+}
 const btnSortAll = document.createElement('button');
 const btnSortObjects = document.createElement('button');
 const btnSortFlats = document.createElement('button');
@@ -59,11 +72,10 @@ function filterCSS(){
   btnSortFlats.classList.add('btnFilter', 'btn3');
   btnSortHotelsRestaurants.classList.add('btnFilter', 'btn4');
   // call fuction for events on buttons
-  filterEvents();
 }
-
+//************************************************************************
 // Event click on buttons
-function filterEvents() {
+function filterEvents(response) {
   // Default display
   btnSortAll.addEventListener('click', function () {
     const listAll = response.filter(function (all) {
@@ -101,6 +113,7 @@ function filterEvents() {
     displayImg(listHtlRstrt);
   });
 }
+//**********************************************************************
 // ----- LOG IN & LOG OUT -----
 // Display of index.html log in or log out page
 //selection of elements
@@ -130,8 +143,10 @@ function logInOut() {
   } 
 }
 logInOut();
+// *********************************************************************
 
 // ----- MODAL 1 & 2 -----
+
 // - MODAL 1 (gallery & options add one, delete one and delete all) -
 //button div modify (icon & text selected)
 const btnOpenModal = document.querySelector('#link-modify');
@@ -173,6 +188,12 @@ modalContent.appendChild(btnAddOnePicture);
 const btnDeleteAll = document.createElement('button');
 btnDeleteAll.classList.add('btnDeleteAll');
 btnDeleteAll.textContent = "Supprimer la gallerie";
+btnDeleteAll.addEventListener('click', function() {
+  const allDlt = document.querySelectorAll('.figureMdl');
+  console.log(allDlt);
+  const dltId = allDlt;
+  dltAll(dltId);
+});
 modalContent.appendChild(btnDeleteAll);
 
 //Display pictures gallery in MODAL 1
@@ -198,12 +219,15 @@ function picturesInModal(response) {
     const divTrash = document.createElement('div');
     divTrash.classList.add('divTrashMove');
     divTrash.innerHTML = '<i class="fa-solid fa-trash-can"></i>';
-    divTrash.addEventListener('click', function(e) {
-      e.preventDefault();
-      const selectPicture = document.querySelector('.figureMdl');
-      console.log(selectPicture);
-      const id = selectPicture.dataset.id;
-      deleteOnePicture(id);
+    //Delete one picture
+    divTrash.addEventListener('click', function() {
+      
+      const selectMdl = document.getElementsByClassName('figureMdl')[i];
+      console.log(selectMdl);
+      // const selectInit = document.querySelector('#figInit');
+      // console.log(selectInit);
+      const selectId = selectMdl.getAttribute('data');
+      deleteOnePicture(selectId);
     });
     divMoveDelete.appendChild(divTrash);
 
@@ -223,8 +247,7 @@ function picturesInModal(response) {
     figcaptionInModal.appendChild(textFigcaption);
   }
 }
-picturesInModal(response);
-
+// *****************************************************************************
 //Open & close modal window
 function openModal() {
   btnOpenModal.addEventListener('click', function() {
@@ -248,32 +271,64 @@ function iconCloseModal() {
   });
 }
 iconCloseModal();
-
+// **************************************************************************
 //Delete one picture
- function deleteOnePicture(id) {
+ function deleteOnePicture(selectId) {
+
+   const token = localStorage.getItem('token');
+   console.log(token);
   
-  const token = localStorage.getItem('token');
-  console.log(token);
-  fetch(`http://localhost:5678/api/works/${id}`, {
+  fetch(`http://localhost:5678/api/works/${selectId}`, {
     method: 'DELETE',
     headers: {
       'accept': '*/*',
-      "Content-Type": "application/json",
-      'Authorization': `Bearer ${token}`,
-    },
+      'Authorization': `Bearer ${token}`
+    }
   })
   .then(response => {
     if(response.ok) {
-      const selectPicture = document.querySelector('.figureMdl');
-      selectPicture.parentNode.removeChild(selectPicture);
+      const del = document.querySelector('.divTrashMove');
+      del.parentElement.removeChild(del);
+      // const figDel = document.querySelector('#figInit');
+      // selectPicture.remove();
+      // figDel.parentNode.removeChild(figDel);
+      console.log(selectPicture);
     }
   })
   .catch(error => {
     console.log(Error);
-    alert(error);
+    alert(Error);
   });
+  console.log(selectId);
 }
 
+// Delete gallery
+function dltAll(dltId) {
+  const token = sessionStorage.getItem('token');
+   console.log(token);
+  
+  fetch(`http://localhost:5678/api/works/${dltId}`, {
+    method: 'DELETE',
+    headers: {
+      'accept': '*/*',
+      'Authorization': `Bearer ${token}`
+    }
+  })
+  .then(response => {
+    if(response.ok) {
+
+      const delDlt = document.querySelector('.figureMdl');
+      delDlt.parentNode.remove();
+      
+
+    }
+  })
+  .catch(error => {
+    console.log(Error);
+    alert(Error);
+  });
+}
+// *************************************************************************
 // - MODAL 2 (add picture)
 // Btn add selected
 const modalAdd = document.querySelector('.modal-add');
@@ -313,11 +368,9 @@ formModalAdd.appendChild(divFormAddPicture);
 
 const divIconAdd = document.createElement('div');
 divIconAdd.classList.add('icon-add');
+divIconAdd.innerHTML = '<i class="fa-regular fa-image"></i>';
 divFormAddPicture.appendChild(divIconAdd);
 
-const iconImgAdd = document.createElement('i');
-iconImgAdd.classList.add('fa-light','fa-image');
-divIconAdd.appendChild(iconImgAdd);
 //div btn & txt
 const divBtnTxt = document.createElement('div');
 divBtnTxt.classList.add('div-btn-txt');
@@ -329,18 +382,19 @@ labelAddImg.classList.add('label-add-img');
 labelAddImg.textContent = '.jpg, .png : 4mo max';
 divBtnTxt.appendChild(labelAddImg);
 
+
+const btnAdd = document.createElement('button');
+btnAdd.classList.add('btn-add');
+divBtnTxt.appendChild(btnAdd);
+
 const inputAddImg = document.createElement('input');
 inputAddImg.setAttribute('type', 'file');
 inputAddImg.setAttribute('id', 'upload-img');
 inputAddImg.setAttribute('name', 'upload-img');
 inputAddImg.setAttribute('accept', '.jpg, .png');
 inputAddImg.setAttribute('multiple', '');
-inputAddImg.style.opacity = 0;
-divBtnTxt.appendChild(inputAddImg);
-
-const btnAdd = document.createElement('button');
-btnAdd.classList.add('btn-add');
-divBtnTxt.appendChild(btnAdd);
+inputAddImg.style.opacity = "0";
+btnAdd.appendChild(inputAddImg);
 
 const txtAdd = document.createElement('p');
 txtAdd.classList.add('txt-add');
@@ -372,12 +426,27 @@ labelAddCat.textContent = 'Catégorie';
 divSendWork.appendChild(labelAddCat);
 
 const inputCat = document.createElement('input');
-inputCat.setAttribute('type', 'list');
-inputCat.setAttribute('datalist', 'category');
+inputCat.setAttribute('list', 'listCat');
 inputCat.setAttribute('id', 'upload-cat');
 inputCat.setAttribute('name', 'upload-cat');
 inputCat.classList.add('input-title-cat');
 divSendWork.appendChild(inputCat);
+
+const dataList = document.createElement('datalist');
+dataList.setAttribute('id', 'listCat');
+inputCat.appendChild(dataList);
+
+const option1 = document.createElement('option');
+option1.setAttribute('value', 'Objets');
+dataList.appendChild(option1);
+
+const option2 = document.createElement('option');
+option2.setAttribute('value', 'Appartements');
+dataList.appendChild(option2);
+
+const option3 = document.createElement('option');
+option3.setAttribute('value', 'Hotels & restaurants');
+dataList.appendChild(option3);
 
 const lineModalAdd = document.createElement('div');
 lineModalAdd.classList.add('lineModal-add');
@@ -393,7 +462,7 @@ divSendWork.appendChild(inputValid);
 
 
 
-
+// **********************************************************************
 // - open & close MODAL 2 -
 function openModalAddPicture(){
   btnAddOnePicture.addEventListener('click', function(){

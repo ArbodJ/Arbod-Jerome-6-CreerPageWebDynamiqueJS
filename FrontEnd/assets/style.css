@@ -360,14 +360,14 @@ li:hover, #link-log:hover, #link-index:hover{
 	display: flex;
 	justify-content: center;
 	align-items: center;
-	width: 58px;
+	width: 54px;
 	height: 46px;
 	margin-top: 28px;
 	border: 1px #B9C5CC solid;
+	border-radius: 5px;
 }
 .fa-image {
-	width: 47px;
-	height: 34px;
+	font-size: 47px;
 	color: #B9C5CC;
 }
 .div-btn-txt {
