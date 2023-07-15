@@ -136,6 +136,12 @@ label{
 	border: none;
 	box-shadow: 0px 4px 14px rgba(0, 0, 0, 0.09);
 }
+.mess-err {
+	width: 100%;
+	height: 11px;
+	color: red;
+	font-size: 11px;
+}
 #sbt{
 	display: flex;
 	justify-content: center;

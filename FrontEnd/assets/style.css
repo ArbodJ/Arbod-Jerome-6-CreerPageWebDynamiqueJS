@@ -203,7 +203,7 @@ li:hover, #link-log:hover, #link-index:hover{
 	height: 100%;
 	background-color: rgba(0, 0, 0, 0.4);
 }
-.modalContent, .modalAddContent {
+.modalContent {
 	display: flex;
 	flex-direction: column;
 	align-items: center;
@@ -345,8 +345,18 @@ li:hover, #link-log:hover, #link-index:hover{
 /*form*/
 .form-modal-add {
 	display: flex;
+	flex-direction: column;
 	width: 420px;
 	margin-top: 36px;
+}
+.modalAddContent {
+	display: flex;
+	flex-direction: column-reverse;
+	align-items: center;
+	background: #fff;
+	border-radius: 10px;
+	width: 630px;
+	height: 731px;
 }
 .div-add-picture {
 	display: flex;
@@ -378,20 +388,29 @@ li:hover, #link-log:hover, #link-index:hover{
 	width: 100%;
 }
 .label-add-img {
-	font-size: 10px;
-	color: #444444
-}
-.btn-add {
+	display: flex;
+	flex-direction: column;
+	cursor: pointer;
 	width: 173px;
-	height: 36px;
-	padding: 10px 33px;
 	background: #CBD6DC;
+	height: 36px;
 	border: none;
 	border-radius: 25px;
 }
-.txt-add {
-	font-size: 14px;
+.label-txt{
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	width: 100%;
+	height: 120px;
 	color: #306685;
+	font-size: 14px;
+}
+.txt-add {
+	margin-top: 7px;
+	font-size: 10px;
+	font-family: Work Sans;
+	color: #444;
 }
 .div-send-work {
 	display: flex;
@@ -407,6 +426,7 @@ li:hover, #link-log:hover, #link-index:hover{
 	margin-top: 21px;
 }
 .input-title-cat {
+	background: #fff;
 	display: flex;
 	margin-top: 10px;
 	width: 100%;
@@ -420,14 +440,30 @@ li:hover, #link-log:hover, #link-index:hover{
 	border: 1px #B3B3B3 solid;
 }
 .btn-add {
-	
-	display: flex !important;
-	justify-content: center!important;
-	cursor: pointer!important;
-	background: #A7A7A7!important;
-	width: 237px!important;
-	height: 36px!important;
-
+	display: flex ;
+	justify-content: center;
+	cursor: pointer;
+	background-color: #1D6154;
+	width: 237px;
+	height: 36px;
+	border: none;
+}
+.btn-add:disabled{
+	background: #A7A7A7;
+}
+input[type="submit"]{
+	font-family: 'Syne';
+	font-weight: 700;
+	color: white;
+	margin : 2em auto ;
+	text-align: center;
+	border-radius: 60px ;
+}
+.error-add {
+	text-align: center;
+	height: 30px;
+	color: red;
+	display: none;
 }
 /* filter button */
 #filter {
@@ -467,7 +503,6 @@ margin: auto;
 }
 #contact > * {
 	text-align: center;
-
 }
 #contact h2{
 	margin-bottom: 20px;
@@ -478,7 +513,6 @@ margin: auto;
 	display: flex;
 	flex-direction: column;
 }
-
 #contact input {
 	height: 50px;
 	font-size: 1.2em;
@@ -491,17 +525,6 @@ margin: auto;
 #contact textarea {
 	border: none;
 	box-shadow: 0px 4px 14px rgba(0, 0, 0, 0.09);
-}
-
-input[type="submit"]{
-	font-family: 'Syne';
-	font-weight: 700;
-	color: white;
-	background-color: #1D6154;
-	margin : 2em auto ;
-	width: 180px;
-	text-align: center;
-	border-radius: 60px ;
 }
 
 footer nav ul {

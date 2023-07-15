@@ -20,7 +20,7 @@
 		</div>
 	</div>
 <header>
-	<h1>Sophie Bluel <span>Architecte d'inteérieur</span></h1>
+	<h1>Sophie Bluel <span>Architecte d'intérieur</span></h1>
 	<nav>
 		<ul>
 			<li><a href="./index.html" id="link-index">projets</a></li>
@@ -54,13 +54,36 @@
 			
 		</div>
 		<div id="myModal2" class="modal-add">
-			
+			<div class="modalAddContent">
+				<form id="formElem" name="formAdd"class="form-modal-add" method="post" enctype="multipart/form-data">
+					<div class="div-add-picture">
+						<div class="icon-add">
+							<i class="fa-regular fa-image"></i>
+						</div>
+						<div class="div-btn-txt">
+							<label for="image" class="label-add-img">
+								<p class="label-txt">+ Ajouter photo</p>
+								<input type="file" name="image" id="image" accept=".jpg, .png" multiple style="opacity: 0;">
+							</label>
+						</div>
+						<p class="txt-add">jpg, png : 4Mo max</p>
+					</div>
+					<div class="div-send-work">
+						<label for="title" class="label-add-title">Titre</label>
+						<input type="text" name="title" id="title" class="input-title-cat">
+						<label for="category" class="label-add-cat">Catégorie</label>
+						<select name="category" id="category" class="input-title-cat" value=""></select>
+						</input>
+					</div>
+					<div class="lineModal-add"></div>
+					<input type="submit" value="Valider" class="btn-add">
+					<p class="error-add">Err : Le champs est vide sur "+ Ajout photo" et/ou "Titre"</p>
+				</form>
+			</div>
 		</div>
 		<div id="filter">
-			
 		</div>
 		<div class="gallery">
-			
 		</div>
 	</section>
 	<section id="contact">

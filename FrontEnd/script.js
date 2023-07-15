@@ -1,10 +1,12 @@
 // call API
+let allWorks = []
 async function getApi(){
 
-  const urlApi = await fetch("http://localhost:5678/api/works", { method: 'GET'});
+  const urlApi = await fetch("http://localhost:5678/api/works");
   const response = await urlApi.json();
   console.log(urlApi);
   console.log(response);
+  allWorks = response;
   displayImg(response);
   picturesInModal(response);
   filterEvents(response);
@@ -38,12 +40,7 @@ function displayImg(response) {
 // ******************************************************************************
 // ----- FILTERS -----
 // Create div filter and buttons
-const filterDiv = document.getElementById('filter');
-if (typeof window !== 'undefined') {
-  console.log('You are on the browser');
-  console.log(document.filter);
-  console.log(document.getElementById('filter'));
-}
+const filterDiv = document.querySelector('#filter');
 const btnSortAll = document.createElement('button');
 const btnSortObjects = document.createElement('button');
 const btnSortFlats = document.createElement('button');
@@ -73,6 +70,7 @@ function filterCSS(){
   btnSortHotelsRestaurants.classList.add('btnFilter', 'btn4');
   // call fuction for events on buttons
 }
+
 //************************************************************************
 // Event click on buttons
 function filterEvents(response) {
@@ -113,6 +111,7 @@ function filterEvents(response) {
     displayImg(listHtlRstrt);
   });
 }
+
 //**********************************************************************
 // ----- LOG IN & LOG OUT -----
 // Display of index.html log in or log out page
@@ -143,6 +142,7 @@ function logInOut() {
   } 
 }
 logInOut();
+
 // *********************************************************************
 
 // ----- MODAL 1 & 2 -----
@@ -188,7 +188,8 @@ modalContent.appendChild(btnAddOnePicture);
 const btnDeleteAll = document.createElement('button');
 btnDeleteAll.classList.add('btnDeleteAll');
 btnDeleteAll.textContent = "Supprimer la gallerie";
-btnDeleteAll.addEventListener('click', function() {
+btnDeleteAll.addEventListener('click', (e) => {
+  e.preventDefault();
   const allDlt = document.querySelectorAll('.figureMdl');
   console.log(allDlt);
   const dltId = allDlt;
@@ -199,16 +200,16 @@ modalContent.appendChild(btnDeleteAll);
 //Display pictures gallery in MODAL 1
 function picturesInModal(response) {
   for (let i = 0; i < response.length; i++) {
-    const element = response[i];
+    const elementM = response[i];
     document.querySelector('galleryInModal');
 
     const figureInModal = document.createElement('figure');
     figureInModal.classList.add('figureMdl');
-    figureInModal.setAttribute('data', element.id);
+    figureInModal.setAttribute('data', elementM.id);
     galleryInModal.appendChild(figureInModal);
 
     const imgInModal = document.createElement('img');
-    imgInModal.setAttribute('src', element.imageUrl);
+    imgInModal.setAttribute('src', elementM.imageUrl);
     imgInModal.classList.add('imgMdl');
     figureInModal.appendChild(imgInModal);
     
@@ -221,11 +222,8 @@ function picturesInModal(response) {
     divTrash.innerHTML = '<i class="fa-solid fa-trash-can"></i>';
     //Delete one picture
     divTrash.addEventListener('click', function() {
-      
       const selectMdl = document.getElementsByClassName('figureMdl')[i];
       console.log(selectMdl);
-      // const selectInit = document.querySelector('#figInit');
-      // console.log(selectInit);
       const selectId = selectMdl.getAttribute('data');
       deleteOnePicture(selectId);
     });
@@ -271,14 +269,15 @@ function iconCloseModal() {
   });
 }
 iconCloseModal();
+
 // **************************************************************************
 //Delete one picture
- function deleteOnePicture(selectId) {
+ async function deleteOnePicture(selectId) {
 
    const token = localStorage.getItem('token');
    console.log(token);
   
-  fetch(`http://localhost:5678/api/works/${selectId}`, {
+  await fetch(`http://localhost:5678/api/works/${selectId}`, {
     method: 'DELETE',
     headers: {
       'accept': '*/*',
@@ -286,57 +285,59 @@ iconCloseModal();
     }
   })
   .then(response => {
-    if(response.ok) {
-      const del = document.querySelector('.divTrashMove');
-      del.parentElement.removeChild(del);
-      // const figDel = document.querySelector('#figInit');
-      // selectPicture.remove();
-      // figDel.parentNode.removeChild(figDel);
-      console.log(selectPicture);
+    if(response.status === 200 || response.status === 204) {
+      console.log("supprimer")
+      // on supprime le work qui a le meme id que select id
+      allWorks = allWorks.filter((work) => {
+        return work.id != selectId
+      })
+      // on vide la liste
+      document.querySelector(".gallery").innerHTML = "";
+      // on regénére la liste avec le work supprimé en moins
+      displayImg(allWorks);
+      document.querySelector('.galleryModal').innerHTML = "";
+      picturesInModal(allWorks)
     }
-  })
-  .catch(error => {
-    console.log(Error);
-    alert(Error);
+    if(response.status === 401 || response.status === 400) {
+      console.log('Error');
+    }
   });
-  console.log(selectId);
 }
-
+//********************************************************************
 // Delete gallery
-function dltAll(dltId) {
-  const token = sessionStorage.getItem('token');
-   console.log(token);
+async function dltAll(dltId) {
+  console.log(dltId);
+  const token = localStorage.getItem('token');
+  console.log(token);
+  const delDlt = document.querySelectorAll('.figureMdl');
   
-  fetch(`http://localhost:5678/api/works/${dltId}`, {
-    method: 'DELETE',
-    headers: {
-      'accept': '*/*',
-      'Authorization': `Bearer ${token}`
-    }
-  })
-  .then(response => {
+  // await fetch(`http://localhost:5678/api/works/${dltId}`, {
+  //   method: 'DELETE',
+  //   headers: {
+  //     'accept': '*/*',
+  //     'Authorization': "Bearer" + token ,
+  //   },
+  // })
+  
     if(response.ok) {
-
-      const delDlt = document.querySelector('.figureMdl');
-      delDlt.parentNode.remove();
-      
-
+      console.log(delDlt);
+    } else {
+      throw new Error("Erreur : Impossible de supprimer.");
     }
-  })
-  .catch(error => {
-    console.log(Error);
-    alert(Error);
-  });
+
+  // })
+  // .catch(error => {
+  //   console.log(Error);
+  // });
 }
+
 // *************************************************************************
 // - MODAL 2 (add picture)
 // Btn add selected
 const modalAdd = document.querySelector('.modal-add');
-modalAdd.classList.add('modal-add');
-//Create Dom elements of modal
-const modalAddContent = document.createElement('div');
-modalAddContent.classList.add('modalAddContent');
-modalAdd.appendChild(modalAddContent);
+
+// Create Dom elements of modal
+const modalAddContent = document.querySelector('.modalAddContent');
 
 const divIconCloseAdd = document.createElement('div');
 divIconCloseAdd.classList.add('divIconCloseAdd');
@@ -354,117 +355,150 @@ const titleModalAdd = document.createElement('p');
 titleModalAdd.classList.add('titleModal');
 titleModalAdd.textContent = 'Ajouter photo';
 modalAddContent.appendChild(titleModalAdd);
-//Form
-const formModalAdd = document.createElement('form');
-formModalAdd.classList.add('form-modal-add');
-formModalAdd.setAttribute('method', 'post');
-formModalAdd.setAttribute('enctype', 'multipart/form-data');
-modalAddContent.appendChild(formModalAdd);
-//Div icon btnadd txt
-//div icon
-const divFormAddPicture = document.createElement('div');
-divFormAddPicture.classList.add('div-add-picture');
-formModalAdd.appendChild(divFormAddPicture);
 
-const divIconAdd = document.createElement('div');
-divIconAdd.classList.add('icon-add');
-divIconAdd.innerHTML = '<i class="fa-regular fa-image"></i>';
-divFormAddPicture.appendChild(divIconAdd);
+//----------------
+// Add one picture
+//----------------
 
-//div btn & txt
-const divBtnTxt = document.createElement('div');
-divBtnTxt.classList.add('div-btn-txt');
-divFormAddPicture.appendChild(divBtnTxt);
+const divPicture = document.querySelector('.div-add-picture');
+const inputAddImg = document.querySelector('#image');
+const preview = document.querySelector('.icon-add');
+const divBtnTxt = document.querySelector('.div-btn-txt');
+const pTxtAdd = document.querySelector('.txt-add');
+const inputTitle = document.querySelector('#title');
+const inputCategory = document.querySelector('#category');
+const btnAdd = document.querySelector('.btn-add');
 
-const labelAddImg = document.createElement('label');
-labelAddImg.setAttribute('for', 'upload-img');
-labelAddImg.classList.add('label-add-img');
-labelAddImg.textContent = '.jpg, .png : 4mo max';
-divBtnTxt.appendChild(labelAddImg);
+// - display one picture
+inputAddImg.addEventListener('change', updateImageDisplay);
 
+function updateImageDisplay() {
+  while (preview.firstChild) {
+    preview.removeChild(preview.firstChild);
+  }
 
-const btnAdd = document.createElement('button');
-btnAdd.classList.add('btn-add');
-divBtnTxt.appendChild(btnAdd);
+  const curFiles = inputAddImg.files;
+  if (curFiles.length === 0) {
+    const para = document.querySelector('.fa-regular fa-image');
+    preview.appendChild(para);
+  } else {
+    const list = document.createElement("ol");
+    divPicture.appendChild(list);
+    
+    for (const file of curFiles) {
+      const listItem = document.createElement("li");
+      const para = document.createElement("p");
+      if (validFileType(file)) {
+        para.textContent = `File name ${file.name}, file size ${returnFileSize(file.size)}.`;
+        const image = document.createElement("img");
+        image.src = URL.createObjectURL(file);
+        image.style.width = '129px';
+        image.style.height = '169px';
 
-const inputAddImg = document.createElement('input');
-inputAddImg.setAttribute('type', 'file');
-inputAddImg.setAttribute('id', 'upload-img');
-inputAddImg.setAttribute('name', 'upload-img');
-inputAddImg.setAttribute('accept', '.jpg, .png');
-inputAddImg.setAttribute('multiple', '');
-inputAddImg.style.opacity = "0";
-btnAdd.appendChild(inputAddImg);
+        pTxtAdd.style.display = 'none';
+        divBtnTxt.style.display = 'none';
+        preview.style.display = 'none';
+        para.style.display = 'none';
 
-const txtAdd = document.createElement('p');
-txtAdd.classList.add('txt-add');
-txtAdd.textContent = "+ Ajouter photo";
-btnAdd.appendChild(txtAdd);
-// div send work
-const divSendWork = document.createElement('div');
-divSendWork.classList.add('div-send-work');
-modalAddContent.appendChild(divSendWork);
-// input title
-const labelAddTitle = document.createElement('label');
-labelAddTitle.classList.add('label-add-title');
-labelAddTitle.setAttribute('for', 'upload-title');
-labelAddTitle.textContent = 'Titre';
-divSendWork.appendChild(labelAddTitle);
+        listItem.appendChild(image);
+        listItem.appendChild(para);
+      } else {
+        pTxtAdd.style.display = 'flex';
+        divBtnTxt.style.display = 'flex';
+        preview.style.display = 'flex';
+        para.style.display = 'block';
+        para.textContent = `File name ${file.name}: Not a valid file type. Update your selection.`;
+        listItem.appendChild(para);
+      }
+      list.appendChild(listItem);
+    }
+  }
+}
 
-const inputTitle = document.createElement('input');
-inputTitle.setAttribute('type', 'text');
-inputTitle.setAttribute('id', 'upload-title');
-inputTitle.setAttribute('name', 'upload-title');
-inputTitle.classList.add('input-title-cat');
-divSendWork.appendChild(inputTitle);
+const fileTypes = [
+  "image/jpg",
+  "image/png",
+];
 
-// input Category
-const labelAddCat = document.createElement('label');
-labelAddCat.classList.add('label-add-cat');
-labelAddCat.setAttribute('for', 'upload-cat');
-labelAddCat.textContent = 'Catégorie';
-divSendWork.appendChild(labelAddCat);
+function validFileType(file) {
+  return fileTypes.includes(file.type);
+}
 
-const inputCat = document.createElement('input');
-inputCat.setAttribute('list', 'listCat');
-inputCat.setAttribute('id', 'upload-cat');
-inputCat.setAttribute('name', 'upload-cat');
-inputCat.classList.add('input-title-cat');
-divSendWork.appendChild(inputCat);
+function returnFileSize(number) {
+  if (number < 1024) {
+    return `${number} bytes`;
+  } else if (number >= 1024 && number < 1048576) {
+    return `${(number / 1024).toFixed(1)} KB`;
+  } else if (number >= 1048576) {
+    return `${(number / 1048576).toFixed(1)} MB`;
+  }
+}
+// - Send picture title and category to modal and page
 
-const dataList = document.createElement('datalist');
-dataList.setAttribute('id', 'listCat');
-inputCat.appendChild(dataList);
+const getCategory = async () => {
+  const response = await fetch('http://localhost:5678/api/categories')
+  const result = await response.json()
+  document.querySelector('#category').innerHTML = result.map((category) => {
+    return `<option value="${category.id}">${category.name}</option>`
+  }).join('')
+  console.log(result)
+}
+const formElem = document.forms.namedItem("formAdd");
+formElem.addEventListener('submit', async (e) => {
+  e.preventDefault();
+  
+  formElem.querySelector('input[name = "image"]');
+  formElem.querySelector('input[name = "title"]');
+  formElem.querySelector('#category');
 
-const option1 = document.createElement('option');
-option1.setAttribute('value', 'Objets');
-dataList.appendChild(option1);
+  const formData = new FormData(formElem);
+  console.log(formData.get("image"));
+  console.log(formData.get("title"));
+  console.log(formData.get("category"));
+  const newWork = {
+    image: formData.get("image"),
+    title: formData.get("title"),
+    category: parseInt(formData.get("category"))
+  }
+  console.log(newWork)
+  sendNewForm(newWork);
+});
+getCategory();
+async function sendNewForm(newWork) {
+  const token = localStorage.getItem('token');
+  const formData = new FormData();
 
-const option2 = document.createElement('option');
-option2.setAttribute('value', 'Appartements');
-dataList.appendChild(option2);
-
-const option3 = document.createElement('option');
-option3.setAttribute('value', 'Hotels & restaurants');
-dataList.appendChild(option3);
-
-const lineModalAdd = document.createElement('div');
-lineModalAdd.classList.add('lineModal-add');
-divSendWork.appendChild(lineModalAdd);
-
-const inputValid = document.createElement('input');
-inputValid.setAttribute('type', 'submit');
-inputValid.setAttribute('value', 'Valider');
-// inputValid.textContent = "Valider";
-inputValid.classList.add('btn-add');
-divSendWork.appendChild(inputValid);
-
-
-
+  if(
+    newWork.title === ''
+    || newWork.image.name === ''
+  ) {
+    document.querySelector(".error-add").style.display = "block"
+    return
+  } else {
+    document.querySelector(".error-add").style.display = "none"
+  }
+  formData.append('title', newWork.title)
+  formData.append('image', newWork.image)
+  formData.append('category', newWork.category)
+  const response = await fetch('http://localhost:5678/api/works', {
+    method: 'POST',
+    headers: {
+      'Authorization': "Bearer " + token,
+    },
+    body: formData,
+  });
+  const result = await response.json();
+  allWorks.push(result)
+  document.querySelector(".gallery").innerHTML = "";
+  displayImg(allWorks)
+  document.querySelector('.galleryModal').innerHTML = "";
+  picturesInModal(allWorks)
+}
 
 // **********************************************************************
 // - open & close MODAL 2 -
 function openModalAddPicture(){
+  const btnAddOnePicture = document.querySelector('.btnAddOnePicture');
   btnAddOnePicture.addEventListener('click', function(){
     modalAdd.style.display = "flex";
     modal.style.display = "none";
