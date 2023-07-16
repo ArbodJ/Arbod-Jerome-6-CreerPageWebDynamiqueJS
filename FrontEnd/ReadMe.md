@@ -1,6 +1,8 @@
 # Créer une page en dynamique avec JavaScript.
 
-Pour acceder au site taper **npm start** sur le dossier Backend du projet.
+Faire d'un protfolio style site vitrine, permettre a un utlisateur de classé les photos de projet par catégorie. Aussi permettre a l'administrateur de pouvoir acceder à ses projets et de les deplacés a sa guise de supprimer un projet ou l'ensemble des photos et d'en ajoputer une nouvelle.
+
+Pour acceder au site allez sur le dossier Backend du projet puis taper en ligne de commande **npm start**.
 
 ## Résumé des etapes effectuées.
 
@@ -27,3 +29,21 @@ Pour acceder au site taper **npm start** sur le dossier Backend du projet.
   - Ajout du style CSS, positionnement, et évènement click sur chaque boutons.
 
 ### Etape 4 :
+  Integreer la page de connexion du portfolio :
+  - Integrer un formulaire de connexion.
+  - Si identifiant ou mot de passe incorrect afficher une message d'erreur.
+  - Si identifiant et mot passe correct rediriger vers le mode edition du portfolio.
+
+### Etape 5 :
+  Ajouter une modale pour gérer les projets :
+  - Integrer un modale avec affichage de tous les projets present sur le portfolio. Accessible par un lien "modifier".
+  - Modale pouvant etre fermer soit sur un click sur l'icon croix ou par click en dehors du modale.
+  - Integrer une fonction permettant la suppression d'un projets. suppression depuis le modale et suppression immediat dans le portfolio en même temps.
+  - Ajout d'un bouton "ajouter une photo" redirection vers un deuxieme modale.
+  - Ajout d'un texte cliquable pour la suppression de tous les projets.
+
+### Etape 6 :
+  Integrer le formulaire pour l'ajout d'un projet :
+  - Un champ pour uploader une image.
+  - Un champ pour nommer le projet.
+  - Un champ pour selectionner une catégorie parmi les catégories disponibles.
